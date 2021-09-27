@@ -1,32 +1,22 @@
+let changeLinesToggled = false;
+
 const generateReading = () => {
+  //reset from previous readings
+  const hexagram = document.getElementById('hexagram');
+  while (hexagram.hasChildNodes()) {
+    hexagram.removeChild(hexagram.firstChild);
+  }
+
   const lineReadings = [];
-  //For one line of the hexagram:
   for (let line = 0; line < 6; line++) {
-    //In the ancient yarrow stalk method, fifty yarrow stalks are used.
     numberOfStalks = 50;
-    // Remove one yarrow stalk from the fifty stalks, and put it in front of you, in a direction parallel to your body.
-    //This is the observer stalk, you will not be using it again while casting the hexagram
     numberOfStalks--;
 
     const firstResult = resolveSeparation(numberOfStalks);
-
-    //Set these counted stalks separately, and gather the uncounted stalks into a new pile.
-    //Repeat the steps above, to obtain a second total of 4 or 8.
-    //This time the possible combinations are 1+4+3, or 1+3+4, or 1+1+2, or 1+2+1.
-    //Likewise, these stalks are separated.
-
     numberOfStalks -= firstResult;
     const secondResult = resolveSeparation(numberOfStalks);
-
-    // Repeat the procedure one last time, to get a third set of 4 or 8 stalks.
-    // You should now have three counted piles of 4/5 or 8/9.
-
     numberOfStalks -= secondResult;
     const thirdResult = resolveSeparation(numberOfStalks);
-
-    //The counted stalks are in groups of 4/5 or 8/9.
-    //For each group of 8 or 9, count 2. For each group of 4 or 5, count 3.
-    //This count should match the final number of removed piles of four, and determines the hexagram line.
 
     const finalResult =
       (firstResult === 9 ? 2 : 3) +
@@ -36,16 +26,20 @@ const generateReading = () => {
     switch (finalResult) {
       case 6:
         lineReadings.push('old yin');
+        //lineReadings.push('yin');
         break;
 
       case 7:
         lineReadings.push('young yang');
+        //lineReadings.push('yang');
         break;
       case 8:
         lineReadings.push('young yin');
+        //lineReadings.push('yin');
         break;
       case 9:
         lineReadings.push('old yang');
+      //lineReadings.push('yang');
 
       default:
         break;
@@ -80,7 +74,7 @@ const drawHexagram = (lineReadings) => {
     const textElement = document.createElement('h2');
     const textNode = document.createTextNode(lineText);
     textElement.appendChild(textNode);
-    hexagram.appendChild(textElement);
+    hexagram.prepend(textElement);
   });
 };
 
@@ -114,4 +108,6 @@ const resolveSeparation = (numberOfStalks) => {
   );
 };
 
-document.querySelector('button').addEventListener('click', generateReading);
+
+
+document.querySelector('#generate-reading').addEventListener('click', generateReading);
